@@ -103,7 +103,8 @@ for n=1:1:n_iter
         %end
 %         slice(:,:)=Ez(:,:,nz/2);
 %         slice = log(slice.*(slice>0)); %logarithmic scale
-%         imagesc(slice)
+%         im = imagesc(slice);
+%         im.AlphaData = 0.05;
         slice(:,:)=Ez(:,ny/2,:);
         slice = log(slice.*(slice>0)); %logarithmic scale
         xr = makehgtform('xrotate',pi/2);
@@ -118,8 +119,7 @@ for n=1:1:n_iter
         zr = makehgtform('zrotate',pi);
         t = makehgtform('translate',[-nx/2 -ny nz/2]);
         g = hgtransform('Matrix',yr * zr * t); 
-        im = imagesc(g,slice)
-        im.AlphaData = 0.1;
+        imagesc(g,slice);
         [X,Y] = meshgrid(nx:-1:1,1:1:ny);
         Z(:,:) = (eps(:,:,1)/eps0 - adipose)*(nz/4)/tumor - nz/2;
         sr = surf(Y,X,Z);
