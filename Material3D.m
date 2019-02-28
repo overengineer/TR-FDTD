@@ -21,20 +21,28 @@ nx = width/dx;
 ny = height/dy;
 nz = length/dz;
 dt   = 0.95/(c*sqrt(dx^-2+dy^-2+dz^-2));
+%source
+srcx = nx / 2;
+srcy = nz / 2;
+srcz = 3 * ny / 4;
 %material
-adipose = 20;
+adipose = 10;
 tumor   = 60;
-mx = nx / 8;
-my = 0;
-mz = nz / 8;
+mx = 3 * ny / 8;
+my = 0
+mz = 0;
 mw = nx / 4; % width
-mh = ny; % height
+mh = ny / 4; % height
 ml = nz / 4; % length
-eps = ones(nx,ny,nz) * eps0 * adipose;
+al = ny / 2;
+eps = ones(nx,ny,nz) * eps0;
 for i=1:1:nx
     for j=1:1:ny
        for k=1:1:nz
-          if ((i>mx) && (i<mw) && (j>my) && (j<mh) && (k>mz) && (k<ml))
+          if (k<al)
+            eps(i,j,k) = eps0 * adipose ;  
+          end
+          if (i>mx && i<(mw+mx) && j>my && j<(mh+my) && k>mz && k<(ml+mz))
             eps(i,j,k) = eps0 * tumor;
           end
        end
@@ -67,8 +75,8 @@ for n=1:1:n_iter
    
     %Gaussian Source
     f(n)= sin(2*pi*f0*n*dt)*exp(-(n*dt-t0)^2/(tw^2))/dy;
-    Ez(round(nx/2),round(ny/2),round(nz/2)) = Ez(round(nx/2),round(ny/2),round(nz/2)) + f(n);
-    Ezn(n)=Ez(round(nx/2),round(ny/2)-4,round(nz/2));
+    Ez(srcx,srcy,srcz) = Ez(srcx,srcy,srcz) + f(n);
+    Ezn(n)=Ez(srcx,srcy,srcz);
     
     %derivatives
     Exy = diff(Ex,1,2);
@@ -84,7 +92,7 @@ for n=1:1:n_iter
     Hz(1:end-1,1:end-1,:) = Hz(1:end-1,1:end-1,:) - (dt/(mu0*dx))*Eyx(:,1:end-1,:) + (dt/(mu0*dy))*Exy(1:end-1,:,:);
      
     %display
-    if (mod(i,5)==0)
+    if (mod(i,10)==0)
         hold on
         %for k=1:20:nz
         %slice(:,:)=Ez(:,:,k);
@@ -93,22 +101,33 @@ for n=1:1:n_iter
         %imagesc(g,slice)
         %alpha(0.5);
         %end
-        slice(:,:)=Ez(:,:,nz/2);
-        slice = log(slice.*(slice>0)); %logarithmic scale
-        imagesc(slice)
+%         slice(:,:)=Ez(:,:,nz/2);
+%         slice = log(slice.*(slice>0)); %logarithmic scale
+%         imagesc(slice)
         slice(:,:)=Ez(:,ny/2,:);
         slice = log(slice.*(slice>0)); %logarithmic scale
         xr = makehgtform('xrotate',pi/2);
-        t = makehgtform('translate',[0 -ny/2 -nz/2]);
-        g = hgtransform('Matrix',xr * t); 
+        zr = makehgtform('zrotate',-pi/2);
+        yr = makehgtform('yrotate',pi);
+        t = makehgtform('translate',[-nx/2 -0 nz/2]);
+        g = hgtransform('Matrix',xr * zr * yr * t); 
         imagesc(g,slice)      
         slice(:,:)=Ez(ny/2,:,:);
         slice = log(slice.*(slice>0)); %logarithmic scale
         yr = makehgtform('yrotate',pi/2);
-        t = makehgtform('translate',[-nx/2 0 nz/2]);
-        g = hgtransform('Matrix',yr * t); 
-        imagesc(g,slice) 
-        alpha(0.3);
+        zr = makehgtform('zrotate',pi);
+        t = makehgtform('translate',[-nx/2 -ny nz/2]);
+        g = hgtransform('Matrix',yr * zr * t); 
+        im = imagesc(g,slice)
+        im.AlphaData = 0.1;
+        [X,Y] = meshgrid(nx:-1:1,1:1:ny);
+        Z(:,:) = (eps(:,:,1)/eps0 - adipose)*(nz/4)/tumor - nz/2;
+        sr = surf(Y,X,Z);
+        sr.AlphaData = 0.05;
+        sr.LineStyle = 'none';
+        alpha(0.7);
+        view([-37.5,120])
+        hold off
         drawnow
 view(3)
 %         y(:,:)=Ey(:,:,round(ny/2));
