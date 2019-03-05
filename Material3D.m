@@ -75,7 +75,7 @@ for n=1:1:n_iter
     Ez(2:end-1,2:end-1,:) = Ez(2:end-1,2:end-1,:) + (dt/(eps(2:end-1,2:end-1,:)*dx)).*Hyx(1:end-1,2:end-1,:) - (dt/(eps(2:end-1,2:end-1,:)*dy)).*Hxy(2:end-1,1:end-1,:);
    
     %gaussian source
-    f= sin(2*pi*f0*n*dt)*exp(-(n*dt-t0)^2/(tw^2))/dy;
+    f = sin(2*pi*f0*n*dt)*exp(-(n*dt-t0)^2/(tw^2))/dy;
     Ez(srcx,srcy,srcz) = Ez(srcx,srcy,srcz) + f;
     %Ezn(n)=Ez(srcx,srcy,srcz);
     
@@ -98,43 +98,6 @@ for n=1:1:n_iter
         pcolor(slice);
         colorbar;
         drawnow
-        %for k=1:20:nz
-        %slice(:,:)=Ez(:,:,k);
-        %slice = log(slice.*(slice>0)); %logarithmic scale
-        %g = hgtransform('Matrix',makehgtform('translate',[0 0 k]));
-        %imagesc(g,slice)
-        %alpha(0.5);
-        %end
-%         slice(:,:)=Ez(:,:,nz/2);
-%         slice = log(slice.*(slice>0)); %logarithmic scale
-%         im = imagesc(slice);
-%         im.AlphaData = 0.05;
-%         close all
-%         hold on
-%         slice(:,:)=Ez(:,ny/2,:);
-%         xr = makehgtform('xrotate',pi/2);
-%         zr = makehgtform('zrotate',-pi/2);
-%         yr = makehgtform('yrotate',pi);
-%         t = makehgtform('translate',[-nx/2 -0 nz/2]);
-%         g = hgtransform('Matrix',xr * zr * yr * t); 
-%         imagesc(g,slice);
-%         colormap
-%         slice(:,:)=Ez(ny/2,:,:);
-%         yr = makehgtform('yrotate',pi/2);
-%         zr = makehgtform('zrotate',pi);
-%         t = makehgtform('translate',[-nx/2 -ny nz/2]);
-%         g = hgtransform('Matrix',yr * zr * t); 
-%         imagesc(g,slice);
-%         [X,Y] = meshgrid(nx:-1:1,1:1:ny);
-%         Z(:,:) = (eps(:,:,1)/eps0 - adipose)*(nz/4)/tumor - nz/2;
-%         sr = surf(Y,X,Z);
-%         sr.AlphaData = 0.05;
-%         sr.LineStyle = 'none';
-%         alpha(0.7);
-%         view([-37.5,120])
-%         view(3)
-%         drawnow
-%         colorbar;
     end
     i = i+1
 end

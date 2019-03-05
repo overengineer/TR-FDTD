@@ -11,7 +11,7 @@ width  = 1;
 height = 1;
 length  = 1;
 %spatial discretization
-dx = 0.01;
+dx = 0.02;
 dy = dx;
 dz = dx;
 nx = width/dx;
@@ -21,9 +21,9 @@ nz = length/dz;
 f0     =1e9;
 tw     = 1e-8/pi;
 t0     = 4*tw;
-srcx = nx / 2;
-srcy = nz / 2;
-srcz = 3 * ny / 4;
+srcx = round(nx / 2);
+srcy = round(nz / 2);
+srcz = round(3 * ny / 4);
 %material
 adipose = 10;
 tumor   = 60;
@@ -94,45 +94,10 @@ for n=1:1:n_iter
      
     %display
     if (mod(i,10)==0)
-        slice(:,:)=Ez(nx,:,:);
-        pcolor()
-        %for k=1:20:nz
-        %slice(:,:)=Ez(:,:,k);
-        %slice = log(slice.*(slice>0)); %logarithmic scale
-        %g = hgtransform('Matrix',makehgtform('translate',[0 0 k]));
-        %imagesc(g,slice)
-        %alpha(0.5);
-        %end
-%         slice(:,:)=Ez(:,:,nz/2);
-%         slice = log(slice.*(slice>0)); %logarithmic scale
-%         im = imagesc(slice);
-%         im.AlphaData = 0.05;
-%         close all
-%         hold on
-%         slice(:,:)=Ez(:,ny/2,:);
-%         xr = makehgtform('xrotate',pi/2);
-%         zr = makehgtform('zrotate',-pi/2);
-%         yr = makehgtform('yrotate',pi);
-%         t = makehgtform('translate',[-nx/2 -0 nz/2]);
-%         g = hgtransform('Matrix',xr * zr * yr * t); 
-%         imagesc(g,slice);
-%         colormap
-%         slice(:,:)=Ez(ny/2,:,:);
-%         yr = makehgtform('yrotate',pi/2);
-%         zr = makehgtform('zrotate',pi);
-%         t = makehgtform('translate',[-nx/2 -ny nz/2]);
-%         g = hgtransform('Matrix',yr * zr * t); 
-%         imagesc(g,slice);
-%         [X,Y] = meshgrid(nx:-1:1,1:1:ny);
-%         Z(:,:) = (eps(:,:,1)/eps0 - adipose)*(nz/4)/tumor - nz/2;
-%         sr = surf(Y,X,Z);
-%         sr.AlphaData = 0.05;
-%         sr.LineStyle = 'none';
-%         alpha(0.7);
-%         view([-37.5,120])
-%         view(3)
-%         drawnow
-%         colorbar;
+        slice(:,:)=Ez(nx/2,:,:);
+        pcolor(slice);
+        colorbar;
+        drawnow
     end
     i = i+1
 end
