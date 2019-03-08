@@ -18,7 +18,7 @@ nx = width/dx;
 ny = height/dy;
 nz = length/dz;
 %source
-f0     =1e9;
+f0     =3e9;%1e9;
 tw     = 1e-8/pi;
 t0     = 4*tw;
 srcx = round(nx / 2);
@@ -48,9 +48,10 @@ for i=1:1:nx
        end
     end
 end
+sigma = (f0*0.5e-9)*((2*(eps>(adipose*eps0)))+1).*(eps>eps0);
 %temporal discretization
 dt   = 0.95/(c*sqrt(dx^-2+dy^-2+dz^-2));
-n_iter = 1000;
+n_iter = 5000;
 %EM field dimensions
 Hx = zeros(nx,ny,nz);
 Hy = zeros(nx,ny,nz);
@@ -70,12 +71,26 @@ for n=1:1:n_iter
     Hyz = diff(Hy,1,3);
     
     %electric field maxwell equations
-    Ex(:,2:end-1,2:end-1) = Ex(:,2:end-1,2:nz-1) + (dt/(eps(:,2:end-1,2:nz-1)*dy)).*Hzy(:,1:end-1,2:end-1) - (dt/(eps(:,2:end-1,2:nz-1)*dz)).*Hyz(:,2:ny-1,1:end-1);
-    Ey(2:end-1,:,2:end-1) = Ey(2:end-1,:,2:end-1) + (dt/(eps(2:end-1,:,2:end-1)*dz)).*Hxz(2:end-1,:,1:end-1) - (dt/(eps(2:end-1,:,2:end-1)*dx)).*Hzx(1:end-1,:,2:end-1);
-    Ez(2:end-1,2:end-1,:) = Ez(2:end-1,2:end-1,:) + (dt/(eps(2:end-1,2:end-1,:)*dx)).*Hyx(1:end-1,2:end-1,:) - (dt/(eps(2:end-1,2:end-1,:)*dy)).*Hxy(2:end-1,1:end-1,:);
+    epsi = eps(:,2:end-1,2:nz-1);
+    ksi = (dt * sigma(:,2:end-1,2:nz-1)) ./ ( 2 * epsi );
+    c2 = (dt./(1+ksi)).*(dt./epsi);
+    c1 = (1-ksi)./(1+ksi);
+    Ex(:,2:end-1,2:end-1) = c1.*Ex(:,2:end-1,2:nz-1) + c2.*((1/dy)*Hzy(:,1:end-1,2:end-1) - (1/dz)*Hyz(:,2:ny-1,1:end-1));
+    
+    epsi = eps(2:end-1,:,2:end-1);
+    ksi = (dt * sigma(2:end-1,:,2:end-1)) ./ ( 2 * epsi );
+    c2 = (dt./(1+ksi)).*(dt./epsi);
+    c1 = (1-ksi)./(1+ksi);
+    Ey(2:end-1,:,2:end-1) = c1.*Ey(2:end-1,:,2:end-1) + c2.*((1/dz)*Hxz(2:end-1,:,1:end-1) - (1/dx)*Hzx(1:end-1,:,2:end-1));
+    
+    epsi = eps(2:end-1,2:end-1,:);
+    ksi = (dt * sigma(2:end-1,2:end-1,:)) ./ ( 2 * epsi );
+    c2 = (dt./(1+ksi)).*(dt./epsi);
+    c1 = (1-ksi)./(1+ksi);
+    Ez(2:end-1,2:end-1,:) = c1.*Ez(2:end-1,2:end-1,:) + c2.*((1/dx)*Hyx(1:end-1,2:end-1,:) - (1/dy)*Hxy(2:end-1,1:end-1,:));
    
     %gaussian source
-    f= sin(2*pi*f0*n*dt)*exp(-(n*dt-t0)^2/(tw^2))/dy;
+    f = sin(2*pi*f0*n*dt)*exp(-(n*dt-t0)^2/(tw^2))/dy;
     Ez(srcx,srcy,srcz) = Ez(srcx,srcy,srcz) + f;
     %Ezn(n)=Ez(srcx,srcy,srcz);
     
@@ -99,7 +114,7 @@ for n=1:1:n_iter
         colorbar;
         drawnow
     end
-    i = i+1
+    i = i+1;
+    disp(i)
 end
 datetime('now')
-

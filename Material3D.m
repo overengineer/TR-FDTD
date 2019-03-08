@@ -50,7 +50,7 @@ for i=1:1:nx
 end
 %temporal discretization
 dt   = 0.95/(c*sqrt(dx^-2+dy^-2+dz^-2));
-n_iter = 1000;
+n_iter = 5000;
 %EM field dimensions
 Hx = zeros(nx,ny,nz);
 Hy = zeros(nx,ny,nz);
