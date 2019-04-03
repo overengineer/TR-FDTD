@@ -1,5 +1,4 @@
 %physical constants
-datetime('now')
 clear all;
 close all;
 c    = 2.998e8;
@@ -101,5 +100,4 @@ for n=1:1:n_iter
     end
     i = i+1
 end
-datetime('now')
 
