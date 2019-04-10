@@ -6,11 +6,11 @@ eta0 = 120*pi;
 mu0  = pi*4e-7;
 eps0 = 1e-9/(36*pi);
 %box dimensions
-width  = 0.09; % 9cm 
-height = width;
-length  = width;
+width  = 0.05; % cm 
+height = 0.05;
+length  = 0.002; % cm
 %source parameters
-f0     = 3e9; % GHz
+f0     = 2e9; % GHz
 tw     = 1e-8/pi;
 t0     = 4*tw;
 %spatial discretization
@@ -32,8 +32,8 @@ ny = round(height/dy);
 nz = round(length/dz);
 %source position
 srcx = round(nx / 2);
-srcy = round(nz / 2);
-srcz = round(3 * ny / 4);
+srcy = round(ny / 2);
+srcz = round(3 * nz / 4);
 %material
 mx = 3 * nx / 8;
 my = ny / 8;
@@ -61,12 +61,12 @@ for i=1:1:nx
 end
 %time discretization
 dt   = 0.99/(c0*sqrt(dx^-2+dy^-2+dz^-2));
-n_iter = 500;
+n_iter = 10000;
 %receivers
-nrec = nx;
+nrec = round(nx / 3)-1;
 recdy = round(ny / nrec);
 recx = srcx;
-recz = srcz + 5;
+recz = srcz;
 rec  = zeros(nrec,n_iter);
 %EM field dimensions
 Hx = zeros(nx,ny,nz);
@@ -129,8 +129,8 @@ for n=1:1:n_iter
     
     %display
     if (mod(i,5)==0)
-        slice(:,:)=Ez(round(nx/2),:,:);
-        pcolor(slice(:,1:round(nx*0.6))');
+        slice(:,:)=Ez(:,:,round(nz/2));
+        pcolor(slice');
         colorbar;
         drawnow
     end

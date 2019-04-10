@@ -7,12 +7,12 @@ eta0 = 120*pi;
 mu0  = pi*4e-7;
 eps0 = 1e-9/(36*pi);
 %box dimensions
-width  = 0.09; % 10cm 
-height = width;
-length  = width;
+width  = 0.05; % 30cm 
+height = 0.05;
+length  = 0.002; % 1cm
 %source parameters
-f0     = 3e9;
-tw     = 1e-8/pi;
+f0     = 6e9; % GHz
+tw     = 0.5e-8/pi;
 t0     = 4*tw;
 %spatial discretization
 adipose = 10;
@@ -32,7 +32,6 @@ nx = round(width/dx);
 ny = round(height/dy);
 nz = round(length/dz);
 % material
-f0     = 3e9; % GHz
 eps = ones(nx,ny,nz) * eps0 * adipose;
 sigma = ones(nx,ny,nz) * f0 * 1e-9 * 0.5 - 0.5;
 %temporal discretization
@@ -92,7 +91,7 @@ for n=1:1:n_iter
     Hz(1:end-1,1:end-1,:) = Hz(1:end-1,1:end-1,:) + (dt/(mu0*dx))*Eyx(:,1:end-1,:) - (dt/(mu0*dy))*Exy(1:end-1,:,:);
     %display
     if (mod(i,5)==0)
-        slice(:,:)=Ez(round(nx/2),:,:);
+        slice(:,:)=Ez(:,:,round(nz/2));
         pcolor(slice');
         colorbar;
         drawnow
