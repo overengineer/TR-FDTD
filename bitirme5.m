@@ -13,14 +13,14 @@ delta = 1.2e-2; %1.2cm
 dx = delta;
 dy = delta;
 dt   = 20e-12; %0.95/(c*sqrt(dx^-2+dy^-2));
-f0     = 2e9; %2GHz
+%f0     = 2e9; %2GHz
 tw     = 16*dt;
 t0     = 200*dt;
 srcx = round(nx/2);
-srcy = ny;
+srcy = round(ny/2);
 eps_r = 4.58;
 sigma = 0.52; %S/m
-ksi = (dt * sigma) / ( 2 * eps0* eps_r );
+ksi = (dt * sigma) / ( 2 * eps0 * eps_r );
 %calculation parameters
 n_iter = 10000;
 %initalization
@@ -39,7 +39,7 @@ for n=1:1:n_iter
     Hyx = diff(Hy,1,1);
     Ez(2:nx-1,2:ny-1) = ((1-ksi)/(1+ksi))*Ez(2:nx-1,2:ny-1) + ((1/(1+ksi))*(dt/(eps0*eps_r)))*((1/dx)*Hyx(2:nx-1,2:ny-1) - (1/dy)*Hxy(2:nx-1,2:ny-1));
     %Gaussian Source
-    f(n)= sin(2*pi*f0*n*dt)*exp(-(n*dt-t0)^2/(tw^2))/dy;
+    f(n)= (-2*(n*dt-t0)*dt/(tw^2))*exp(-(n*dt-t0)^2/(tw^2))/dy;
     Ez(srcx,srcy) = Ez(srcx,srcy) + f(n);
     %Neuman Condition
     Ez(:,2)  = -Ez(:,1);
@@ -51,10 +51,14 @@ for n=1:1:n_iter
     for i=1:1:23
         receivers(i,:) = Ez(i*10,:);
     end
-    pcolor(Ez');
-    shading interp;
+    pcolor(Ez')
+    colorbar
+    shading interp
+    title(n)
     drawnow
 end
+
+plot(f)
 
 save('bitirme5.mat','receivers');
 
