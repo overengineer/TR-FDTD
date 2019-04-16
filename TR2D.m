@@ -23,7 +23,7 @@ eps_r = 1;
 sigma = 0;
 ksi = (dt * sigma) / ( 2 * eps0* eps_r );
 %calculation parameters
-n_iter = 10000;
+n_iter = 500;
 %initalization
 Hx = zeros(nx,ny);
 Hy = zeros(nx,ny);
@@ -40,7 +40,7 @@ for n=n_iter:-1:1
     Ez(2:nx-1,2:ny-1) = ((1-ksi)/(1+ksi))*Ez(2:nx-1,2:ny-1) - ((1/(1+ksi))*(dt/(eps0*eps_r)))*((1/dx)*Hyx(2:nx-1,2:ny-1) - (1/dy)*Hxy(2:nx-1,2:ny-1));
 
     for i=1:1:23
-        Ez(i*10,:) = Ez(i*10,:) + receivers(i,end:-1:1);
+        Ez(i*10,srcy) = Ez(i*10,srcy) + receivers(i,n);
     end
     %Neuman Condition
     Ez(:,2)  = -Ez(:,1);

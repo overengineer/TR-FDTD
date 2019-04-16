@@ -22,12 +22,12 @@ eps_r = 4.58;
 sigma = 0.52; %S/m
 ksi = (dt * sigma) / ( 2 * eps0 * eps_r );
 %calculation parameters
-n_iter = 10000;
+n_iter = 500;
 %initalization
 Hx = zeros(nx,ny);
 Hy = zeros(nx,ny);
 Ez = zeros(nx,ny);
-receivers = zeros(23,ny);
+receivers = zeros(23,n_iter);
 %iteration
 for n=1:1:n_iter
     %Maxwell Equations (TMz)
@@ -49,7 +49,7 @@ for n=1:1:n_iter
     %display
     %n = n + 1;
     for i=1:1:23
-        receivers(i,:) = Ez(i*10,:);
+        receivers(i,n) = Ez(i*10,srcy);
     end
     pcolor(Ez')
     colorbar
