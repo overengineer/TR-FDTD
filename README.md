@@ -7,6 +7,33 @@ This repo contains Matlab files I have wrote for my graduation project. Some of 
 
 ## Content
 
+### diel_tumor_lin.m
+
+Tumor inside dielectric medium observed by linear antenna array
+
+### diel_tumor_lin.m
+
+Dielectric medium without tumor observed by linear array
+
+### TR_lin.m
+
+TR linear array, dielectric medium
+
+### TR.m
+
+TR linear array, conductive medum
+
+### WithTumor.m
+
+Tumor inside conductive medium observed by linear array
+
+### WithoutTumor.m
+
+Conductive medium without tumor observed by linear array
+
+
+## Old Content
+
 ### bitirme1.m
 
 2D lossless FTDT causal-time simulation
@@ -35,8 +62,8 @@ same but with parameters choosen by Kosmas et al.
 
 3D lossy with
 
-### TR.m
+### Other scripts
 
-TR algorithm
+Retrieved from Pelin Cerav's work. 
 
 
