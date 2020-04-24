@@ -20,7 +20,7 @@ t0     = 4*tw;
 %spatial discretization
 adipose = 5;
 tumor   = 10;
-sigma   = 5;
+sigma   = 0;
 epsr    = tumor;
 w    = 2 * pi * band;
 k    = (w/c0)*sqrt(epsr-1j*sigma/(w*eps0));
@@ -47,7 +47,7 @@ sigma = zeros(nx,ny,nz);% * f0 * 1e-9 * 0.5 - 0.5;
 dt   = 0.99/(c0*sqrt(dx^-2+dy^-2+dz^-2));
 
 rec1 = trec - rec;
-tau = 100e-12;
+tau = 20e-12;
 [foo,tp] = max(abs(rec1),[],2); 
 for k=1:1:nrec
     recn(k,:) = exp(-((dt*((1:1:n_iter)-tp(k)))/tau).^2) .* rec1(k,:);
@@ -118,8 +118,9 @@ for n=1:1:n_iter
     Hz(1:end-1,1:end-1,:) = Hz(1:end-1,1:end-1,:) + (dt/(mu0*dx))*Eyx(:,1:end-1,:) - (dt/(mu0*dy))*Exy(1:end-1,:,:);
 
     %display
-    if (mod(n,10)==0)
-        slice(:,:)=Ez(60:100,round(ny/2)-20:round(ny/2)+20,srcz);
+    if 1 %n>120 && n<160)
+        %slice(:,:)=Ez(30:60,round(ny/2)-20:round(ny/2)+3,srcz);
+        slice(:,:)=Ez(35:55,35:55,srcz);
         pcolor(slice.');
         colorbar;
         shading interp
@@ -128,7 +129,8 @@ for n=1:1:n_iter
     i = i+1;
     disp(i)
      
-    R(n) = varimax_norm(Ez(60:100,round(ny/2)-20:round(ny/2)+20,srcz));
+    %R(n) = varimax_norm(Ez(30:56,round(ny/2)-20:round(ny/2)+3,srcz));
+    R(n) = varimax_norm(Ez(35:55,35:55,srcz));
 end
 
 figure;plot(R)
