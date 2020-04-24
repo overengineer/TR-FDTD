@@ -1,6 +1,10 @@
 # TR-FTDT
 > Time Reversal Algorithm with Finite-Difference Time-Domain Method
 Software implementation of a microwave imaging technique for breast cancer early diagnosis. 
+
+## Disclaimer
+This repo contains Matlab files I have wrote for my graduation project. Some of them are not working. This project is based on a paper by [P. Kosmas & C.M. Rappaport](https://ieeexplore.ieee.org/document/1463350). Although it may not correctly reflect their work. Files belonging to my latest commit is expected to work. 
+
 ## Content
 
 ### bitirme1.m
@@ -33,10 +37,6 @@ same but with parameters choosen by Kosmas et al.
 
 ### TR.m
 
-TR algorithm.. (not working)
-
-### others
-
-Pelin Cerav's codes
+TR algorithm
 
 
