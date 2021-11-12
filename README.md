@@ -5,23 +5,28 @@ Software implementation of a microwave imaging technique for breast cancer early
 ## Disclaimer
 This repo contains Matlab files I have wrote for my graduation project. Some of them are not working. This project is based on a paper by [P. Kosmas & C.M. Rappaport](https://ieeexplore.ieee.org/document/1463350). Although it may not correctly reflect their work. Files belonging to my latest commit is expected to work. 
 
+## How it Works?
+
+- Run `WithTumor.m` and `WithoutTumor.m`. These will collect data from 3D simulated tissue. Collected data is exported to `withtumor.mat` and `withouttumor.mat` files.
+- Then run `TR.m` file. This is time reversal algorithm. It will take difference signals from previous two simulations. Filters the signal using some special filter, then propagates it in the same environment backwards in time. 2D slice of electrical Field in the 3D environment is visualised in every n iterations. Hopefully you can see tumor in the visual.
+
 ## Content
 
 ### diel_tumor_lin.m
 
 Tumor inside dielectric medium observed by linear antenna array
 
-### diel_tumor_lin.m
+### diel_no_tumor_lin.m
 
 Dielectric medium without tumor observed by linear array
 
 ### TR_lin.m
 
-TR linear array, dielectric medium
+Time Reversal of linear array, dielectric medium
 
 ### TR.m
 
-TR linear array, conductive medum
+Time Reversal of linear array, conductive medum
 
 ### WithTumor.m
 
