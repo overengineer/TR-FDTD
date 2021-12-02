@@ -2,8 +2,7 @@
 > Time Reversal Algorithm with Finite-Difference Time-Domain Method
 Software implementation of a microwave imaging technique for breast cancer early diagnosis. 
 
-## Disclaimer
-This repo contains Matlab files I have wrote for my graduation project. Some of them are not working. This project is based on a paper by [P. Kosmas & C.M. Rappaport](https://ieeexplore.ieee.org/document/1463350). Although it may not correctly reflect their work. Files belonging to my latest commit is expected to work. 
+This repo contains Matlab files I have wrote for my graduation project. This project is based on a paper by [P. Kosmas & C.M. Rappaport](https://ieeexplore.ieee.org/document/1463350).
 
 ## How it Works?
 
